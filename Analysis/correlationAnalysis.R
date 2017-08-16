@@ -1,24 +1,77 @@
-# package install and load
-install.packages("Rcpp")
+install.packages("UsingR")
+install.packages("data.table")
 install.packages("readr")
-install.packages("reader")
-install.packages("RMySQL")
-library(Rcpp)
-library(readr)
-library(reader)
-library(RMySQL)
+require(readr)
+require(data.table)
+require(UsingR)
+require(ggplot2)
 
-#Configuration value of database connect object 
-dbInfo <- "Mysql"
-dbInfo$user <- "root"
-dbInfo$password <- "soo2080"
-dbInfo$host <- "localhost"
-dbInfo$dbname <- "pear"
+## load dataset
+myData <- read_csv("F:/JJH/DevProject/R/DA_price/PreProcessingData/merge_weather_price.csv")
+View(myData)
+
+## check data
+par(mfrow=c(1,2))
+hist(myData$price, col='blue', breaks=100, xlab='', main='Histogram of price')
+hist(myData$avgTemper, col='red', breaks=100, xlab='', main='Histogram of averageTemperature')
+par(mfrow=c(1,1))
+
+## convert to data.frame type
+myData <- as.data.frame(myData)
+
+## correlation test about myData$price and others factor
+result <- 'correlation Test'
+
+result$avgTemper <- cor.test(myData$price, myData$avgTemper)
+result$rain <- cor.test(myData$price, myData$rain)
+result$sunHour <- cor.test(myData$price, myData$sunHour)
+result$sunAmout <- cor.test(myData$price, myData$sunAmount)
+result$humidity <- cor.test(myData$price, myData$humidity)
+result$cloud <- cor.test(myData$price, myData$cloud)
+result$wind <- cor.test(myData$price, myData$wind)
+
+## draw scatter plot using ggplot library
+result$Graph <- 'Scatter plots'
+
+###########################################################################################################################################################################################################################################################################################################################################################################
+## price vs average temperature
+result$Graph$avgTemper <- ggplot(data=myData, aes(x=price, y=avgTemper))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS Average Temperature")+labs(x='Pear Price')+labs(y='Average Temperature')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$avgTemper
+
+## price vs rain
+result$Graph$rain <- ggplot(data=myData, aes(x=price, y=rain))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS Rain")+labs(x='Pear Price')+labs(y='Rain')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$rain
+
+## price vs sunHour
+result$Graph$sunHour <- ggplot(data=myData, aes(x=price, y=sunHour))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS sunHour")+labs(x='Pear Price')+labs(y='sunHour')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$sunHour
 
 
-# Connect to local database and character encoding setting
-db <- dbConnect(MySQL(), user = dbInfo$user, password = dbInfo$password, dbname = dbInfo$dbname, host = dbInfo$host)
-dbSendQuery(db, "SET NAMES utf8")
+## price vs sunAmount
+result$Graph$sunAmount <- ggplot(data=myData, aes(x=price, y=sunAmount))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS sunAmount")+labs(x='Pear Price')+labs(y='sunAmount')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$sunAmount
 
-# Check list tables of exist on db
-dbListTables(db)
+
+## price vs humidity
+result$Graph$humidity <- ggplot(data=myData, aes(x=price, y=humidity))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS humidity")+labs(x='Pear Price')+labs(y='humidity')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$humidity
+
+
+## price vs cloud
+result$Graph$cloud <- ggplot(data=myData, aes(x=price, y=cloud))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS cloud")+labs(x='Pear Price')+labs(y='cloud')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$cloud
+
+## price vs wind
+result$Graph$wind <- ggplot(data=myData, aes(x=price, y=wind))+geom_point(shape=18,size=2.3,colour='red')+ggtitle("Scatter plot : Pear price VS wind")+labs(x='Pear Price')+labs(y='wind')+theme(plot.title = element_text(hjust = 0.5))+stat_smooth(method = lm, se=FALSE)
+result$Graph$wind
+###########################################################################################################################################################################################################################################################################################################################################################################
+
+
+## regression test
+out = lm(price~avgTemper, data=myData)
+summary(out)
+
+## draw graph of regrssion result 
+plot(price~avgTemper, data=myData, xlab='Average Temperature', ylab='Pear Price')
+abline(out,col='red')
+ggplot(data=myData, aes(x=price, y=avgTemper))+geom_count()+geom_smooth(method='lm')
