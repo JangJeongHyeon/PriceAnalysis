@@ -28,6 +28,10 @@ clean_pear_price <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/clean_pear_pr
 View(clean_pear_price)
 clean_weather_data <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/clean_weather_data.csv")
 View(clean_weather_data)
+origin_auction_pear_price <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/origin_auction_pear_price.csv")
+View(origin_auction_pear_price)
+origin_wholesale_pear_price <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/origin_wholesale_pear_price.csv")
+View(origin_wholesale_pear_price)
 
 # Encoding of characterset
 Encoding(clean_weather_data$location) <- "UTF-8"
@@ -35,6 +39,8 @@ Encoding(clean_weather_data$location) <- "UTF-8"
 # Save imported data to database
 #dbWriteTable(db,"price",clean_pear_price)
 #dbWriteTable(db,"weather",clean_weather_data)
+dbWriteTable(db, "wholesale_price", origin_wholesale_pear_price)
+dbWriteTable(db, "auction_price", origin_auction_pear_price)
 
 ##### get data from mysql database
 

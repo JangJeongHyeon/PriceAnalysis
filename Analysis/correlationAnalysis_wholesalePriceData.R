@@ -1,18 +1,18 @@
 install.packages("UsingR")
 install.packages("data.table")
 install.packages("readr")
-library(readxl)
 require(readr)
 require(data.table)
 require(UsingR)
 require(ggplot2)
 
 ## load dataset
-myData <- read_csv("F:/JJH/DevProject/R/DA_price/PreProcessingData/merge_weather_price.csv")
+myData <- read_csv("F:/JJH/DevProject/R/DA_price/PreProcessingData/merge_weather_wholesale_price.csv")
 View(myData)
 
 ## load dataset (shift two weeks)
-shiftData <- read_excel("F:/JJH/DevProject/R/DA_price/PreProcessingData/Year_WEEK_AVG_Price_Shift_Two_Weeks.xlsx")
+shiftData <- read_csv("F:/JJH/DevProject/R/DA_price/PreProcessingData/merge_weather_wholesale_price_shift_2weeks.csv")
+View(shiftData)
 
 ## check data
 par(mfrow=c(1,2))
@@ -22,11 +22,12 @@ par(mfrow=c(1,1))
 
 ## convert to data.frame type
 myData <- as.data.frame(myData)
+shiftData <- as.data.frame(shiftData)
 
 ## correlation test about myData$price and others factor
 
 #### First myData
-result <- 'correlation Test1'
+result <- 'Correlation test of my data'
 result$avgTemper <- cor.test(myData$price, myData$avgTemper)
 result$rain <- cor.test(myData$price, myData$rain)
 result$sunHour <- cor.test(myData$price, myData$sunHour)
@@ -36,7 +37,7 @@ result$cloud <- cor.test(myData$price, myData$cloud)
 result$wind <- cor.test(myData$price, myData$wind)
 
 #### Second shiftData
-result2 <- 'correlation Test2'
+result2 <- 'Correlation test of shift data'
 result2$avgTemper <- cor.test(shiftData$price, shiftData$avgTemper)
 result2$rain <- cor.test(shiftData$price, shiftData$rain)
 result2$sunHour <- cor.test(shiftData$price, shiftData$sunHour)

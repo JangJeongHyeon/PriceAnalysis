@@ -14,7 +14,7 @@ FROM weather GROUP BY date, location;
 ## CREATE TABLE class_price
 ## merge and calcuate average price of each product class
 CREATE TABLE class_price SELECT date, class, round(avg(price),0) AS price FROM price GROUP BY date, class ORDER BY date ASC;
-
+CREATE TABLE class_wolesale_price SELECT date, class, round(avg(price),0) AS price FROM price GROUP BY date, class ORDER BY date ASC;
 ##############################################################################################################################
 
 
@@ -50,7 +50,7 @@ FROM daily_average_weather;
 SELECT * FROM year_week_avg_weather;
 
 ## Forth
-SELECT YEAR(date) as YEAR, WEEK(date) AS WEEK, round(avg(avgTemper),1) as avgTemper, 
+CREATE TABLE merge_year_week_avg_weather SELECT YEAR(date) as YEAR, WEEK(date) AS WEEK, round(avg(avgTemper),1) as avgTemper, 
 		round(avg(rain),1) as rain, round(avg(sunHour),1) as sunHour, round(avg(sunAmount),1) as sunAmount, 
 		round(avg(humidity),1) as humidity, round(avg(cloud),1) as cloud, round(avg(snow),1) as snow, round(avg(wind),1) as wind
 FROM daily_average_weather GROUP BY YEAR(date), WEEK(date);
@@ -65,12 +65,15 @@ SELECT * FROM year_week_avg_price;
 ##############################################################################################################################################
 
 ##################################################### Processing [3] - merge #################################################################
-SELECT * FROM year_week_avg_weather;
-SELECT * FROM year_week_avg_price;
+SELECT count(*) FROM merge_year_week_avg_weather;
+SELECT count(*) FROM year_week_avg_price WHERE class = 'H';
+CREATE TABLE merge_weather_price
 SELECT 
      W.YEAR, W.WEEK, W.avgTemper, W.rain, W.sunHour, W.sunAmount, 
      W.humidity, W.cloud, W.snow, W.wind, P.price
-FROM year_week_avg_weather AS W
+FROM merge_year_week_avg_weather AS W
 	INNER JOIN year_week_avg_price AS P
-		ON W.YEAR = P.
+		ON W.YEAR = P.YEAR AND W.WEEK = P.week AND P.class = 'H';
 ##############################################################################################################################################
+
+SELECT * FROM merge_weather_price;
