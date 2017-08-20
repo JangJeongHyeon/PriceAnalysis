@@ -32,6 +32,8 @@ origin_auction_pear_price <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/orig
 View(origin_auction_pear_price)
 origin_wholesale_pear_price <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/origin_wholesale_pear_price.csv")
 View(origin_wholesale_pear_price)
+clean_weather_highTemper_data <- read_csv("F:/JJH/DevProject/R/DA_price/dataSet/clean_weather_data_(highTemper).csv",col_types = cols(cloud = col_double(), date = col_integer(), humidity = col_double(), sunAmount = col_double(), sunHour = col_double()))
+View(clean_weather_highTemper_data)
 
 # Encoding of characterset
 Encoding(clean_weather_data$location) <- "UTF-8"
@@ -41,7 +43,7 @@ Encoding(clean_weather_data$location) <- "UTF-8"
 #dbWriteTable(db,"weather",clean_weather_data)
 dbWriteTable(db, "wholesale_price", origin_wholesale_pear_price)
 dbWriteTable(db, "auction_price", origin_auction_pear_price)
-
+dbWriteTable(db, "weather_high", clean_weather_highTemper_data)
 ##### get data from mysql database
 
 # preprocessing Price data
