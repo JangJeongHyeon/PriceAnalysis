@@ -38,8 +38,17 @@ result$snow <- cor.test(myData$price, myData$snow)
 result$wind <- cor.test(myData$price, myData$wind)
 
 
+## Spearman correlation test
 result$spearman <- 'Spearman'
 result$spearman$highTemper <- cor.test(myData$price, myData$highTemper, method = "spearman")
+result$spearman$rain <- cor.test(myData$price, myData$rain, method = "spearman")
+result$spearman$sunHour <- cor.test(myData$price, myData$sunHour, method = "spearman")
+result$spearman$sunAmout <- cor.test(myData$price, myData$sunAmount, method = "spearman")
+result$spearman$humidity <- cor.test(myData$price, myData$humidity, method = "spearman")
+result$spearman$cloud <- cor.test(myData$price, myData$cloud, method = "spearman")
+result$spearman$snow <- cor.test(myData$price, myData$snow, method = "spearman")
+result$spearman$wind <- cor.test(myData$price, myData$wind, method = "spearman")
+
 
 
 #### Second shiftData
